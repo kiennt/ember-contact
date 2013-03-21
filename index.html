@@ -10,13 +10,39 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <script type="text/x-handlebars" data-template-name="index">
-    <h2>Index Content:</h2>
+  <script type="text/x-handlebars">
+    <h1>List Contacts</h1>
+    {{view App.ListContactView}}
+  </script>
+
+  <script type="text/x-handlebars" data-template-name="list-contact">
     <ul>
-    {{#each item in content}}
-        <li>{{item}}</li>
-    {{/each}}
-     </ul>
+      {{#each view.contacts}}
+        {{view App.ShowContactView contactBinding="this"}}
+      {{/each}}
+    </ul>
+    {{#if view.isNewVisible }}
+      {{view App.NewContactView}}
+    {{else}}
+      <a href="#" {{action new target="view"}}>New contact</a>
+    {{/if}}
+  </script>
+
+  <script type="text/x-handlebars" data-template-name="show-contact">
+    {{#unless view.isEdit}}
+      {{view.contact.fullName}}
+      <a href="#" {{action edit target="view"}}>Edit</a>
+      <a href="#" {{action delete target="view"}}>Delete</a>
+    {{else}}
+      {{view App.EditContactView contactBinding="view.contact"}}
+    {{/unless}}
+  </script>
+
+  <script type="text/x-handlebars" data-template-name="edit-contact">
+    {{view Ember.TextField valueBinding="view.contact.firstName" placeholder="First name"}}
+    {{view Ember.TextField valueBinding="view.contact.lastName" placeholder="Last name"}}
+    <a href="#" {{action save target="view"}}>Save</a>
+    <a href="#" {{action cancel target="view"}}>Cancel</a>
   </script>
 </body>
 </html>
